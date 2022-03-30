@@ -11,7 +11,7 @@
         android:id="@+id/helloTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#F49A9A"
+        android:background="#43AC1D"
         android:text="HELLO ПРИВЕТ"
         android:textColor="#FFFFFF"
         android:textSize="17sp"
