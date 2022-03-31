@@ -41,7 +41,7 @@ public class AnimatedColoredTextView {
         animatedColoredTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                timerAnimation.cancel();
+                if(firstActivationOfTimerAnimation)timerAnimation.cancel();
             }
         });
     }
