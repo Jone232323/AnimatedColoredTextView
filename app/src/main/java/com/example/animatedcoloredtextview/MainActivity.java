@@ -16,7 +16,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,13 +25,6 @@ public class MainActivity extends AppCompatActivity {
         animatedColoredTextView.initHelloTextView(findViewById(R.id.helloTextView));
         animatedColoredTextView.initContainer(findViewById(R.id.container));
         animatedColoredTextView.setText("hello привет");
-
-
-
-
-
-
-
 
     }
 

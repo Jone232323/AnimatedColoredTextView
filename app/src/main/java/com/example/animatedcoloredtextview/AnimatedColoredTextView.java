@@ -18,12 +18,18 @@ import java.util.TimerTask;
 
 public class AnimatedColoredTextView {
 
+    private final long TIME_DELAY=5000;
+    private final int MOVE_STEP=10;
+    private final int PERIOD_FOR_TIMER_ANIMATION=50;
+
     private Context context;
     private TextView animatedColoredTextView;
     private Timer timerAnimation;
 
     private boolean downMove=true;
-    private boolean firstActivationOfAnimation=false;
+    private boolean firstActivationOfTimerAnimation=false;
+
+
 
     AnimatedColoredTextView(Context context)
     {
@@ -32,7 +38,6 @@ public class AnimatedColoredTextView {
     public void  initHelloTextView(TextView textView)
     {
         animatedColoredTextView=textView;
-
         animatedColoredTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,7 +52,7 @@ public class AnimatedColoredTextView {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                if(firstActivationOfAnimation)timerAnimation.cancel();
+                if(firstActivationOfTimerAnimation)timerAnimation.cancel();
 
                 setColorEnglishAndRussianLocales(Color.RED,Color.BLUE);
 
@@ -58,17 +63,6 @@ public class AnimatedColoredTextView {
             }
         });
     }
-    public void move(float x, float y)
-    {
-        animatedColoredTextView.setX(x-animatedColoredTextView.getWidth()/2);
-        animatedColoredTextView.setY(y-animatedColoredTextView.getHeight()/2);
-    }
-
-    public void setText(String text)
-    {
-        animatedColoredTextView.setText(text.toUpperCase());
-    }
-
     private void setColorEnglishAndRussianLocales(int colorEnglishLocale, int colorRussianLocale)
     {
         if(animatedColoredTextView.getCurrentTextColor()==Color.WHITE) {
@@ -86,52 +80,67 @@ public class AnimatedColoredTextView {
             animatedColoredTextView.setText(spannable);
         }
     }
-
     private void startAnimation(float sizeOfTheMovingArea)
     {
-        firstActivationOfAnimation=true;
         TranslateAnimation animationPause=new TranslateAnimation(
                 Animation.ABSOLUTE, 0,
                 Animation.ABSOLUTE, 0,
                 Animation.ABSOLUTE, 0,
                 Animation.ABSOLUTE, 0);
-        animationPause.setDuration(5000);
-
+        animationPause.setDuration(TIME_DELAY);
         animationPause.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
 
 
             }
-
             @Override
             public void onAnimationEnd(Animation animation) {
 
-                timerAnimation=new Timer(true);
-                timerAnimation.scheduleAtFixedRate(new TimerTask() {
-                    @Override
-                    public void run() {
-
-                        if(animatedColoredTextView.getY()+animatedColoredTextView.getHeight()<sizeOfTheMovingArea&&downMove)
-                        {animatedColoredTextView.setY(animatedColoredTextView.getY()+10);}
-                        else{downMove=false;}
-
-                        if(animatedColoredTextView.getY()>=0&&downMove==false) {
-                            animatedColoredTextView.setY(animatedColoredTextView.getY() - 10);}
-                        else{downMove=true;}
-                    }
-                },0,50);
+                startAnimationMoveDownOrMoveUp(sizeOfTheMovingArea);
 
             }
-
             @Override
             public void onAnimationRepeat(Animation animation) {
-
             }
         });
         animatedColoredTextView.startAnimation(animationPause);
-
     }
+    private void startAnimationMoveDownOrMoveUp(float sizeOfTheMovingArea)
+    {
+        firstActivationOfTimerAnimation=true;
+
+        timerAnimation=new Timer(true);
+        timerAnimation.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if(animatedColoredTextView.getY()+animatedColoredTextView.getHeight()<=sizeOfTheMovingArea && downMove){
+                    animatedColoredTextView.setY(animatedColoredTextView.getY()+MOVE_STEP);}
+                else{downMove=false;}
+
+                if(animatedColoredTextView.getY()>=0 && downMove==false) {
+                    animatedColoredTextView.setY(animatedColoredTextView.getY() - MOVE_STEP);}
+                else{downMove=true;}
+            }
+        },0,PERIOD_FOR_TIMER_ANIMATION);
+    }
+
+    private void move(float x, float y)
+    {
+        animatedColoredTextView.setX(x-animatedColoredTextView.getWidth()/2);
+        animatedColoredTextView.setY(y-animatedColoredTextView.getHeight()/2);
+    }
+    public void setText(String text)
+    {
+        if(text.length()!=0){
+            animatedColoredTextView.setText(text.toUpperCase());}
+        else{
+            animatedColoredTextView.setText("HELLO ПРИВЕТ");}
+    }
+
+
+
+
 
 
 
